@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ID Game Checker</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+            padding: 10px;
+        }
+
+        .container {
+            background: #1f1f1f;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 100%;
+            max-width: 600px;
+            box-sizing: border-box; /* Menyertakan padding dalam lebar elemen */
+        }
+
+        .container img {
+            max-width: 185px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            margin: 20px 0;
+            color: #e0e0e0;
+            font-size: 28px;
+        }
+
+        .game-selection {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .button {
+            padding: 10px 15px;
+            font-size: 14px;
+            color: #ffffff;
+            background: linear-gradient(135deg, #6200ea, #3700b3);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s, filter 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .button:hover {
+            background: linear-gradient(135deg, #3700b3, #6200ea);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+            filter: brightness(1.1);
+        }
+
+        .button:focus {
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(98, 0, 234, 0.5);
+            transform: translateY(-3px);
+        }
+
+        .input-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .input-section input[type="text"] {
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 350px;
+            margin-bottom: 15px;
+            background-color: #2b2b2b;
+            color: #ffffff;
+            transition: background-color 0.3s, border-color 0.3s, transform 0.3s;
+        }
+
+        .input-section input[type="text"]:focus {
+            background-color: #3700b3;
+            border-color: #ffffff;
+            transform: translateY(-3px);
+        }
+
+        .result {
+            background: #2b2b2b;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #333;
+            text-align: left;
+            color: #b3b3b3;
+            word-break: break-word; /* Memastikan teks tidak meluber dari layar */
+        }
+
+        .loading-spinner {
+            display: none;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top: 4px solid #ffffff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading {
+            display: block;
+        }
+
+        .copyright {
+            position: absolute;
+            bottom: 5px;
+            left: 5px;
+            font-size: 12px;
+            color: #757575;
+        }
+
+        /* Media Query untuk tampilan mobile */
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .game-selection {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .button {
+                width: 100%;
+                padding: 10px;
+                font-size: 16px;
+                margin-bottom: 10px; /* Menambahkan jarak antar tombol */
+            }
+
+            .input-section input[type="text"] {
+                font-size: 14px;
+            }
+
+            .result {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <img src="img/logo.gif" alt="Logo"> <!-- GIF di atas h1 -->
+    <h1>ID Game Checker</h1>
+
+    <div class="game-selection">
+        <button class="button" onclick="selectGame('mobileLegends')">Mobile Legends</button>
+        <button class="button" onclick="selectGame('freeFire')">Free Fire</button>
+        <button class="button" onclick="selectGame('clashOfClans')">Clash of Clans</button>
+        <button class="button" onclick="selectGame('higgsDomino')">Higgs Domino</button>
+        <button class="button" onclick="selectGame('pubgMobile')">PUBG Mobile</button>
+        <button class="button" onclick="selectGame('genshinImpact')">Genshin Impact</button>
+        <button class="button" onclick="selectGame('pointBlank')">Point Blank</button>
+        <button class="button" onclick="selectGame('aov')">Arena of Valor</button>
+        <button class="button" onclick="selectGame('codMobile')">Call of Duty Mobile</button>
+    </div>
+
+    <div class="input-section" id="input-section">
+        <input type="text" id="game-id" placeholder="Masukin ID Game">
+        <input type="text" id="zone-id" placeholder="Masukin Zone ID" style="display: none;">
+        <button class="button" onclick="checkGame()">Cek ID</button>
+    </div>
+
+    <div class="loading-spinner" id="loading-spinner"></div>
+    <div class="result" id="result">Pilih game dan masukin ID untuk cek.</div>
+</div>
+
+<div class="copyright">Copyright by ariphx</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    let selectedGame = '';
+
+    function selectGame(game) {
+        const inputSection = document.getElementById('input-section');
+        const zoneInput = document.getElementById('zone-id');
+        const gameIdInput = document.getElementById('game-id');
+
+        if (selectedGame === game) {
+            inputSection.classList.add('hide');
+            setTimeout(() => {
+                inputSection.style.display = 'none';
+                inputSection.classList.remove('hide');
+                selectedGame = '';
+            }, 500);
+        } else {
+            if (selectedGame !== '') {
+                inputSection.classList.add('hide');
+                setTimeout(() => {
+                    inputSection.style.display = 'none';
+                    inputSection.classList.remove('hide');
+
+                    gameIdInput.value = '';
+                    zoneInput.value = '';
+
+                    selectedGame = game;
+                    inputSection.style.display = 'flex';
+                    inputSection.classList.add('show');
+                    document.getElementById('result').innerHTML = 'Masukin ID dan klik "Cek ID".';
+
+                    zoneInput.style.display = game === 'mobileLegends' ? 'block' : 'none';
+                    gameIdInput.placeholder = game === 'clashOfClans' ? 'Tulis ID tanpa #' : 'Masukin ID Game';
+                }, 500);
+            } else {
+                selectedGame = game;
+                inputSection.style.display = 'flex';
+                inputSection.classList.add('show');
+                document.getElementById('result').innerHTML = 'Masukin ID dan klik "Cek ID".';
+
+                zoneInput.style.display = game === 'mobileLegends' ? 'block' : 'none';
+                gameIdInput.placeholder = game === 'clashOfClans' ? 'Tulis ID tanpa #' : 'Masukin ID Game';
+            }
+        }
+    }
+
+    function displayResult(response) {
+        const resultDiv = document.getElementById('result');
+        const loadingSpinner = document.getElementById('loading-spinner');
+
+        loadingSpinner.classList.remove('loading');
+
+        if (response.error) {
+            resultDiv.innerHTML = `<p>Error: ${response.msg}</p>`;
+        } else {
+            const data = response.data;
+            let resultHTML = '';
+
+            if (data.id) resultHTML += `<p><strong>ID:</strong> ${data.id}</p>`;
+            if (data.server) resultHTML += `<p><strong>Server:</strong> ${data.server}</p>`;
+            if (data.username) resultHTML += `<p><strong>Username:</strong> ${data.username}</p>`;
+            if (data.region) resultHTML += `<p><strong>Region:</strong> ${data.region}</p>`;
+
+            if (resultHTML === '') {
+                resultDiv.innerHTML = '<p>ID tidak ditemukan atau data kosong.</p>';
+            } else {
+                resultDiv.innerHTML = resultHTML;
+            }
+        }
+    }
+
+    function checkGame() {
+        const id = document.getElementById('game-id').value;
+        const zoneId = document.getElementById('zone-id').value;
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const resultDiv = document.getElementById('result');
+
+        if (!id) {
+            alert('Tolong masukin ID Game.');
+            return;
+        }
+
+        loadingSpinner.classList.add('loading');
+        resultDiv.innerHTML = '';
+
+        let url;
+        switch(selectedGame) {
+            case 'mobileLegends':
+                url = `https://id-game-checker.p.rapidapi.com/mobile-legends/${id}/${zoneId}`;
+                break;
+            case 'freeFire':
+                url = `https://id-game-checker.p.rapidapi.com/free-fire/${id}`;
+                break;
+            case 'clashOfClans':
+                url = `https://id-game-checker.p.rapidapi.com/coc/${id}`;
+                break;
+            case 'higgsDomino':
+                url = `https://id-game-checker.p.rapidapi.com/higgs-domino/${id}`;
+                break;
+            case 'pubgMobile':
+                url = `https://id-game-checker.p.rapidapi.com/pubgm-global/${id}`;
+                break;
+            case 'genshinImpact':
+                url = `https://id-game-checker.p.rapidapi.com/genshin/${id}/asia`;
+                break;
+            case 'pointBlank':
+                url = `https://id-game-checker.p.rapidapi.com/point-blank/${id}`;
+                break;
+            case 'aov':
+                url = `https://id-game-checker.p.rapidapi.com/arena-of-valor/${id}`;
+                break;
+            case 'codMobile':
+                url = `https://id-game-checker.p.rapidapi.com/CoD-mobile/${id}`;
+                break;
+            default:
+                return;
+        }
+
+        const settings = {
+            async: true,
+            crossDomain: true,
+            url: url,
+            method: 'GET',
+            headers: {
+                'x-rapidapi-key': '223c564835msh9329b1e11cc3fbcp1306ddjsn17597808d3a5',
+                'x-rapidapi-host': 'id-game-checker.p.rapidapi.com'
+            }
+        };
+
+        $.ajax(settings).done(function (response) {
+            displayResult(response);
+        }).fail(function() {
+            loadingSpinner.classList.remove('loading');
+            resultDiv.innerHTML = '<p>Terjadi kesalahan saat menghubungi API.</p>';
+        });
+    }
+</script>
+
+</body>
+</html>
+
