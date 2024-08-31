@@ -26,7 +26,7 @@
             text-align: center;
             width: 100%;
             max-width: 600px;
-            box-sizing: border-box; /* Menyertakan padding dalam lebar elemen */
+            box-sizing: border-box;
         }
 
         .container img {
@@ -107,7 +107,7 @@
             border: 1px solid #333;
             text-align: left;
             color: #b3b3b3;
-            word-break: break-word; /* Memastikan teks tidak meluber dari layar */
+            word-break: break-word;
         }
 
         .loading-spinner {
@@ -138,7 +138,6 @@
             color: #757575;
         }
 
-        /* Media Query untuk tampilan mobile */
         @media (max-width: 600px) {
             .container {
                 padding: 15px;
@@ -189,13 +188,13 @@
     </div>
 
     <div class="input-section" id="input-section">
-        <input type="text" id="game-id" placeholder="Masukin ID Game">
-        <input type="text" id="zone-id" placeholder="Masukin Zone ID" style="display: none;">
+        <input type="text" id="game-id" placeholder="Masukan ID Game">
+        <input type="text" id="zone-id" placeholder="Masukan Zone ID" style="display: none;">
         <button class="button" onclick="checkGame()">Cek ID</button>
     </div>
 
     <div class="loading-spinner" id="loading-spinner"></div>
-    <div class="result" id="result">Pilih game dan masukin ID untuk cek.</div>
+    <div class="result" id="result">Pilih game dan Masukan ID untuk cek.</div>
 </div>
 
 <div class="copyright">Copyright by ariphx</div>
@@ -229,19 +228,19 @@
                     selectedGame = game;
                     inputSection.style.display = 'flex';
                     inputSection.classList.add('show');
-                    document.getElementById('result').innerHTML = 'Masukin ID dan klik "Cek ID".';
+                    document.getElementById('result').innerHTML = 'Masukan ID dan klik "Cek ID".';
 
                     zoneInput.style.display = game === 'mobileLegends' ? 'block' : 'none';
-                    gameIdInput.placeholder = game === 'clashOfClans' ? 'Tulis ID tanpa #' : 'Masukin ID Game';
+                    gameIdInput.placeholder = game === 'clashOfClans' ? 'Tulis ID tanpa #' : 'Masukan ID Game';
                 }, 500);
             } else {
                 selectedGame = game;
                 inputSection.style.display = 'flex';
                 inputSection.classList.add('show');
-                document.getElementById('result').innerHTML = 'Masukin ID dan klik "Cek ID".';
+                document.getElementById('result').innerHTML = 'Masukan ID dan klik "Cek ID".';
 
                 zoneInput.style.display = game === 'mobileLegends' ? 'block' : 'none';
-                gameIdInput.placeholder = game === 'clashOfClans' ? 'Tulis ID tanpa #' : 'Masukin ID Game';
+                gameIdInput.placeholder = game === 'clashOfClans' ? 'Tulis ID tanpa #' : 'Masukan ID Game';
             }
         }
     }
@@ -278,7 +277,7 @@
         const resultDiv = document.getElementById('result');
 
         if (!id) {
-            alert('Tolong masukin ID Game.');
+            alert('Tolong Masukan ID Game.');
             return;
         }
 
